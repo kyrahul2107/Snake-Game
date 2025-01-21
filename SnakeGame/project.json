@@ -1,0 +1,8 @@
+{
+  "engine": "cocos-creator-js",
+  "packages": "packages",
+  "name": "SnakeGame",
+  "id": "bbcc3d84-582f-4604-b99d-4444e8f25592",
+  "version": "2.4.14",
+  "isNew": false
+}
