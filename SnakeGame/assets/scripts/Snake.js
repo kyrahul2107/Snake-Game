@@ -1,7 +1,6 @@
 cc.Class({
   extends: cc.Component,
   properties: {
-    moveSpeed: 100,
     bodyPrefab: cc.Prefab,
     foodPrefab: cc.Prefab,
     scoreNode: cc.Label,
@@ -35,30 +34,6 @@ cc.Class({
       JSON.parse(cc.sys.localStorage.getItem("scoreHistory")) || [];
   },
 
-  onKeyDown(event) {
-    switch (event.keyCode) {
-      case cc.macro.KEY.left:
-        if (this.direction.x !== 1) {
-          this.direction = cc.v2(-1, 0); // Only change the head's direction
-        }
-        break;
-      case cc.macro.KEY.right:
-        if (this.direction.x !== -1) {
-          this.direction = cc.v2(1, 0); // Only change the head's direction
-        }
-        break;
-      case cc.macro.KEY.up:
-        if (this.direction.y !== -1) {
-          this.direction = cc.v2(0, 1); // Only change the head's direction
-        }
-        break;
-      case cc.macro.KEY.down:
-        if (this.direction.y !== 1) {
-          this.direction = cc.v2(0, -1); // Only change the head's direction
-        }
-        break;
-    }
-  },
 
   saveScore() {
     // Add the current score to the history
@@ -88,28 +63,21 @@ cc.Class({
 
   spawnFood() {
     const parentNode = this.node.parent;
+    const tileSize = 40; // Tile size
     const halfWidth = parentNode.width / 2;
     const halfHeight = parentNode.height / 2;
-
-    const foodPosX = Math.random() * halfWidth * 2 - halfWidth;
-    const foodPosY = Math.random() * halfHeight * 2 - halfHeight;
-
+    const columns = Math.floor(parentNode.width / tileSize);
+    const rows = Math.floor(parentNode.height / tileSize);
+    const randomCol = Math.floor(Math.random() * columns);
+    const randomRow = Math.floor(Math.random() * rows);
+    const foodPosX = randomCol * tileSize - halfWidth + tileSize / 2;
+    const foodPosY = randomRow * tileSize - halfHeight + tileSize / 2;
     this.foodNode = cc.instantiate(this.foodPrefab);
-    this.foodNode.setPosition(foodPosX, foodPosY);
+    this.foodNode.setPosition(cc.v2(foodPosX, foodPosY));
     parentNode.addChild(this.foodNode);
   },
+  
 
-  update(dt) {
-    const movement = this.direction.mul(this.moveSpeed * dt);
-    for (let i = this.snakeBody.length - 1; i >= 0; i--) {
-      this.positionsArray[i].x += movement.x;
-      this.positionsArray[i].y += movement.y;
-      this.snakeBody[i].setPosition(this.positionsArray[i]);
-    }
-    if (this.checkCollision(this.foodNode, this.snakeBody[0])) {
-      this.foodCollisionOccu();
-    }
-  },
   
   foodCollisionOccu() {
     console.log("Collision Occured");

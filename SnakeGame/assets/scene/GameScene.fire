@@ -304,7 +304,7 @@
       "y": 0,
       "z": 0
     },
-    "_skewX": -0.9000000000000001,
+    "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
     "_groupIndex": 0,
@@ -442,8 +442,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -436.542,
-        -280.984,
+        0,
+        0,
         0,
         0,
         0,
@@ -475,7 +475,6 @@
       "__id__": 8
     },
     "_enabled": true,
-    "moveSpeed": 100,
     "bodyPrefab": {
       "__uuid__": "82779945-a429-4481-be79-b70d420921f8"
     },
@@ -516,11 +515,11 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_batchAsBitmap": false,
-    "_styleFlags": 3,
+    "_styleFlags": 1,
     "_underlineHeight": 0,
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
-    "_N$fontFamily": "Arial",
+    "_N$fontFamily": "Times New Roman",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
     "_id": "a1XzLMt91GpaVVvTFiNskf"
@@ -611,11 +610,11 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_batchAsBitmap": false,
-    "_styleFlags": 3,
+    "_styleFlags": 1,
     "_underlineHeight": 0,
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
-    "_N$fontFamily": "Arial",
+    "_N$fontFamily": "Times New Roman",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
     "_id": "18APAu/29G74EhlMTLGrPD"
