@@ -488,7 +488,7 @@
       "__id__": 12
     },
     "delayTime": 60,
-    "positionsArray": [],
+    "snakeBody": [],
     "_id": "9acIG0cBhFDI6kSqvjtpwn"
   },
   {
@@ -549,7 +549,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 8.502262456795602,
+      "width": 0,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -644,7 +644,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 8.502262456795602,
+      "width": 0,
       "height": 50.4
     },
     "_anchorPoint": {
