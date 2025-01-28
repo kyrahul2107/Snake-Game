@@ -15,32 +15,26 @@ cc.Class({
     cc.director.getCollisionManager().enabledDebugDraw = true;
     this.snakeBody = [];
 
-    // Create and position the head of the snake
     const head = cc.instantiate(this.bodyPrefab);
     head.parent = this.node.parent;
     this.snakeBody.push(head);
 
-    // Spawn initial food
     this.spawnFood();
 
     this.schedule(this.moveSnake, 0.4);
 
-    // Initialize score and timer
     this.score = 0;
     this.updateScore();
     this.currentTime = this.delayTime;
     this.schedule(this.updateTimerLabel, 1);
 
-    // Schedule game over and score save
     this.scheduleOnce(() => {
       this.loadEndGameScene();
       this.saveScore();
     }, this.delayTime);
 
-    // Setup input listeners
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
 
-    // Load score history
     this.scoreHistory =
       JSON.parse(cc.sys.localStorage.getItem("scoreHistory")) || [];
   },
@@ -50,10 +44,10 @@ cc.Class({
 
     switch (event.keyCode) {
       case cc.macro.KEY.left:
-        if (headComp.direction.x !== 1) headComp.direction = cc.v2(-1, 0); 
+        if (headComp.direction.x !== 1) headComp.direction = cc.v2(-1, 0);
         break;
       case cc.macro.KEY.right:
-        if (headComp.direction.x !== -1) headComp.direction = cc.v2(1, 0); 
+        if (headComp.direction.x !== -1) headComp.direction = cc.v2(1, 0);
         break;
       case cc.macro.KEY.up:
         if (headComp.direction.y !== -1) headComp.direction = cc.v2(0, 1);
@@ -99,16 +93,36 @@ cc.Class({
 
   spawnFood() {
     const parentNode = this.node.parent;
-    const tileSize = 40; 
+    const tileSize = 40;
     const halfWidth = parentNode.width / 2;
     const halfHeight = parentNode.height / 2;
     const columns = Math.floor(parentNode.width / tileSize);
     const rows = Math.floor(parentNode.height / tileSize);
-    const randomCol = Math.floor(Math.random() * columns);
-    const randomRow = Math.floor(Math.random() * rows);
-    const foodPosX = randomCol * tileSize - halfWidth + tileSize / 2;
-    const foodPosY = randomRow * tileSize - halfHeight + tileSize / 2;
 
+    let foodPosX, foodPosY, positionIsValid;
+
+    do {
+      const randomCol = Math.floor(Math.random() * columns);
+      const randomRow = Math.floor(Math.random() * rows);
+
+      foodPosX = randomCol * tileSize - halfWidth + tileSize / 2;
+      foodPosY = randomRow * tileSize - halfHeight + tileSize / 2;
+
+      positionIsValid = true;
+
+      for (let i = 0; i < this.snakeBody.length; i++) {
+        const snakeSegment = this.snakeBody[i];
+        const snakePos = snakeSegment.position;
+
+        if (
+          Math.abs(snakePos.x - foodPosX) < tileSize &&
+          Math.abs(snakePos.y - foodPosY) < tileSize
+        ) {
+          positionIsValid = false;
+          break;
+        }
+      }
+    } while (!positionIsValid);
     this.foodNode = cc.instantiate(this.foodPrefab);
     this.foodNode.setPosition(cc.v2(foodPosX, foodPosY));
     parentNode.addChild(this.foodNode);
@@ -117,16 +131,14 @@ cc.Class({
   checkCollision(nodeA, nodeB) {
     const boxCollider = nodeA.getComponent(cc.PhysicsBoxCollider);
     const circleCollider = nodeB.getComponent(cc.PhysicsCircleCollider);
-  
-    const boxWorldPos = nodeA.convertToWorldSpaceAR(cc.v2(0, 0)); // Box position in world space
+
+    const boxWorldPos = nodeA.convertToWorldSpaceAR(cc.v2(0, 0)); 
     const boxWidth = boxCollider.size.width;
     const boxHeight = boxCollider.size.height;
 
-    // Get the circle collider's world position and radius
-    const circleWorldPos = nodeB.convertToWorldSpaceAR(cc.v2(0, 0)); // Circle position in world space
+    const circleWorldPos = nodeB.convertToWorldSpaceAR(cc.v2(0, 0));
     const circleRadius = circleCollider.radius;
 
-    // Find the closest point on the box to the circle center
     const closestX = Math.max(
       boxWorldPos.x - boxWidth / 2,
       Math.min(circleWorldPos.x, boxWorldPos.x + boxWidth / 2)
@@ -136,12 +148,9 @@ cc.Class({
       Math.min(circleWorldPos.y, boxWorldPos.y + boxHeight / 2)
     );
 
-    // Calculate the distance between the closest point and the circle's center
     const distanceX = circleWorldPos.x - closestX;
     const distanceY = circleWorldPos.y - closestY;
     const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-    // If the distance is less than or equal to the circle's radius, it's a collision
     return distance <= circleRadius;
   },
 

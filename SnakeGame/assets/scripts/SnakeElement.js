@@ -15,16 +15,43 @@ cc.Class({
       this.node.x + this.direction.x * this.tileSize,
       this.node.y + this.direction.y * this.tileSize
     );
+
+    const halfWidth = this.node.parent.width / 2;
+    const halfHeight = this.node.parent.height / 2;
+
     if (this.isPositionWithinBounds(newPosition)) {
       this.node.setPosition(newPosition);
     } else {
-      console.log("Boundary Collision Detected");
+      this.newEntryPosition = cc.v2(0, 0);
+      if (newPosition.x >= halfWidth) {
+        console.log("Crossed Right Boundary");
+        this.newEntryPosition.x = -halfWidth + 20;
+        this.newEntryPosition.y = newPosition.y;
+      } else if (newPosition.x <= -halfWidth) {
+        console.log("Crossed Left Boundary");
+        this.newEntryPosition.x = halfWidth + 20;
+        this.newEntryPosition.y = newPosition.y;
+      }
+      if (newPosition.y >= halfHeight) {
+        console.log("Crossed Top Boundary");
+        this.newEntryPosition.y = -halfHeight + 20;
+        this.newEntryPosition.x = newPosition.x;
+      } else if (newPosition.y <= -halfHeight) {
+        console.log("Crossed Bottom Boundary");
+        this.newEntryPosition.y = halfHeight;
+        this.newEntryPosition.x = newPosition.x;
+      }
+      this.node.setPosition(this.newEntryPosition);
+      console.log(
+        "Boundary Collision Detected, New Position:",
+        this.newEntryPosition
+      );
     }
   },
 
   calculateNewSegmentPosition() {
     const currentPos = this.node.position;
-    const direction = this.lastDirection || cc.v2(0, -1); 
+    const direction = this.lastDirection || cc.v2(0, -1);
 
     const offset = 40;
     const newX = currentPos.x - direction.x * offset;
