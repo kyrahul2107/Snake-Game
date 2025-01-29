@@ -29,7 +29,7 @@ cc.Class({
         this.newEntryPosition.y = newPosition.y;
       } else if (newPosition.x <= -halfWidth) {
         console.log("Crossed Left Boundary");
-        this.newEntryPosition.x = halfWidth + 20;
+        this.newEntryPosition.x = halfWidth -20;
         this.newEntryPosition.y = newPosition.y;
       }
       if (newPosition.y >= halfHeight) {
