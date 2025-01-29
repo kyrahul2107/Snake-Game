@@ -129,6 +129,7 @@ cc.Class({
   },
 
   checkCollision(nodeA, nodeB) {
+    debugger;
     const boxCollider = nodeA.getComponent(cc.PhysicsBoxCollider);
     const circleCollider = nodeB.getComponent(cc.PhysicsCircleCollider);
 

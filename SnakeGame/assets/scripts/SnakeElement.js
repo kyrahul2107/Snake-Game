@@ -38,7 +38,7 @@ cc.Class({
         this.newEntryPosition.x = newPosition.x;
       } else if (newPosition.y <= -halfHeight) {
         console.log("Crossed Bottom Boundary");
-        this.newEntryPosition.y = halfHeight;
+        this.newEntryPosition.y = halfHeight-40;
         this.newEntryPosition.x = newPosition.x;
       }
       this.node.setPosition(this.newEntryPosition);
