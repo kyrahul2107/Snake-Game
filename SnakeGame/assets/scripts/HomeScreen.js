@@ -39,6 +39,7 @@ cc.Class({
       this
     );
     this.updateSoundButtonSprite();
+    this.scoreHistory=[];
     this.scoreHistory = JSON.parse(cc.sys.localStorage.getItem("scoreHistory"));
   },
 
@@ -69,13 +70,14 @@ cc.Class({
   },
 
   onScoreHistoryButtonClick() {
-    console.log("Score History button clicked!");
+    if (this.scoreHistory === null) {
+      console.log("No Score History Exist... Click On Play...");
+      return;
+    }
     // Clear previous rows
     console.log("Before Removale of Child Node", this.scoreHistoryContainer);
 
     this.scoreHistoryContainer.removeAllChildren();
-    console.log("After Removale of Child Node", this.scoreHistoryContainer);
-    console.log("Score History Array is:", this.scoreHistory);
     // Loop through the scoreHistory array and create rows
     this.scoreHistory.forEach((scoreData, index) => {
       // Instantiate the ScoreRowPrefab
