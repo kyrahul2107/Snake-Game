@@ -16,6 +16,7 @@ cc.Class({
     this.snakeBody = [];
 
     const head = cc.instantiate(this.bodyPrefab);
+    head.zIndex=1;
     head.parent = this.node.parent;
     this.snakeBody.push(head);
 
@@ -129,7 +130,6 @@ cc.Class({
   },
 
   checkCollision(nodeA, nodeB) {
-    debugger;
     const boxCollider = nodeA.getComponent(cc.PhysicsBoxCollider);
     const circleCollider = nodeB.getComponent(cc.PhysicsCircleCollider);
 
