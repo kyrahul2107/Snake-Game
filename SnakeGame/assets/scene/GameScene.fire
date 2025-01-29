@@ -329,9 +329,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 92,
-      "g": 243,
-      "b": 122,
+      "r": 50,
+      "g": 163,
+      "b": 72,
       "a": 255
     },
     "_contentSize": {
@@ -487,8 +487,7 @@
     "timerLabel": {
       "__id__": 12
     },
-    "delayTime": 120,
-    "snakeBody": [],
+    "delayTime": 180,
     "_id": "9acIG0cBhFDI6kSqvjtpwn"
   },
   {

@@ -7,22 +7,19 @@ cc.Class({
     scoreNode: cc.Label,
     timerLabel: cc.Label,
     delayTime: 5,
-    snakeBody: [],
   },
 
   onLoad() {
     cc.director.getCollisionManager().enabled = true;
-    cc.director.getCollisionManager().enabledDebugDraw = true;
     this.snakeBody = [];
 
     const head = cc.instantiate(this.bodyPrefab);
-    head.zIndex=1;
+    head.zIndex = 1;
     head.parent = this.node.parent;
     this.snakeBody.push(head);
-
     this.spawnFood();
-
-    this.schedule(this.moveSnake, 0.4);
+    this.snakeSpeed = 0.5;
+    this.schedule(this.moveSnake, this.snakeSpeed);
 
     this.score = 0;
     this.updateScore();
@@ -31,7 +28,6 @@ cc.Class({
 
     this.scheduleOnce(() => {
       this.loadEndGameScene();
-      this.saveScore();
     }, this.delayTime);
 
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -69,6 +65,17 @@ cc.Class({
 
     newSegment.setPosition(newSegmentPos);
     this.snakeBody.push(newSegment);
+    this.increaseSnakeSpeed();
+  },
+
+  increaseSnakeSpeed() {
+    const timeOfIncrement = this.snakeBody.length % 5;
+    if (!timeOfIncrement) {
+      console.log("It is Time of Increment");
+      this.snakeSpeed -= this.snakeSpeed * 0.2;
+      this.unschedule(this.moveSnake);
+      this.schedule(this.moveSnake, this.snakeSpeed); 
+    }
   },
 
   moveSnake() {
@@ -133,7 +140,7 @@ cc.Class({
     const boxCollider = nodeA.getComponent(cc.PhysicsBoxCollider);
     const circleCollider = nodeB.getComponent(cc.PhysicsCircleCollider);
 
-    const boxWorldPos = nodeA.convertToWorldSpaceAR(cc.v2(0, 0)); 
+    const boxWorldPos = nodeA.convertToWorldSpaceAR(cc.v2(0, 0));
     const boxWidth = boxCollider.size.width;
     const boxHeight = boxCollider.size.height;
 
@@ -161,7 +168,7 @@ cc.Class({
       const segment = this.snakeBody[i];
       if (this.arePositionsEqual(head.position, segment.position)) {
         console.log("Game Over!");
-        cc.director.loadScene("HomeScreen");
+        this.loadEndGameScene();
         return true;
       }
     }
@@ -220,6 +227,7 @@ cc.Class({
   },
 
   loadEndGameScene() {
+    this.saveScore();
     console.log("Game Over!");
     cc.director.loadScene("HomeScreen");
   },

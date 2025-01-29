@@ -39,7 +39,7 @@ cc.Class({
       this
     );
     this.updateSoundButtonSprite();
-    this.scoreHistory=[];
+    this.scoreHistory = [];
     this.scoreHistory = JSON.parse(cc.sys.localStorage.getItem("scoreHistory"));
   },
 
@@ -70,15 +70,25 @@ cc.Class({
   },
 
   onScoreHistoryButtonClick() {
-    if (this.scoreHistory === null) {
+    if (this.scoreHistory === null || this.scoreHistory.length === 0) {
       console.log("No Score History Exist... Click On Play...");
       return;
     }
-    // Clear previous rows
-    console.log("Before Removale of Child Node", this.scoreHistoryContainer);
 
+    // Ensure a maximum of 6 scores
+    while (this.scoreHistory.length > 6) {
+      this.scoreHistory.shift(); // Removes the first (oldest) element
+      console.log(
+        "Removed the oldest score, updated score history:",
+        this.scoreHistory
+      );
+    }
+
+    // Clear previous rows
+    console.log("Before Removal of Child Nodes", this.scoreHistoryContainer);
     this.scoreHistoryContainer.removeAllChildren();
-    // Loop through the scoreHistory array and create rows
+
+    // Loop through the updated scoreHistory array and create rows
     this.scoreHistory.forEach((scoreData, index) => {
       // Instantiate the ScoreRowPrefab
       const scoreRow = cc.instantiate(this.scoreRowPrefab);
@@ -96,7 +106,7 @@ cc.Class({
 
       // Position the row within the container
       const rowHeight = 50; // Adjust this value based on the height of your prefab
-      scoreRow.setPosition(0, -index * rowHeight); // Arrange rows vertically, with a gap of rowHeight
+      scoreRow.setPosition(0, -index * rowHeight); // Arrange rows vertically
 
       // Add the row to the container
       this.scoreHistoryContainer.addChild(scoreRow);
@@ -106,9 +116,13 @@ cc.Class({
       "After Looping the Score History Array:",
       this.scoreHistoryContainer
     );
+
+    // Add a background to the score container (Optional UI Enhancement)
     if (this.scoreHistoryContainer) {
-      // Add a Graphics component to the node to draw the background
-      let graphics = this.scoreHistoryContainer.addComponent(cc.Graphics);
+      let graphics = this.scoreHistoryContainer.getComponent(cc.Graphics);
+      if (!graphics) {
+        graphics = this.scoreHistoryContainer.addComponent(cc.Graphics);
+      }
 
       // Set the fill color to white
       graphics.fillColor = cc.Color.WHITE;
@@ -117,7 +131,7 @@ cc.Class({
       let width = this.scoreHistoryContainer.width;
       let height = this.scoreHistoryContainer.height;
 
-      // Draw a filled rectangle to serve as the background
+      // Draw a filled rectangle as the background
       graphics.fillRect(-width / 2, -height / 2, width, height);
     } else {
       console.warn("scoreHistoryContainer is not assigned!");
