@@ -22,7 +22,7 @@ cc.Class({
   async fetchSurveyData() {
     try {
       const response = await fetch(
-        "https://instadium-live-dev.s3.us-east-1.amazonaws.com/sportsnet-rogers/SurveyData.json"
+        "https://instadium-live-dev.s3.us-east-1.amazonaws.com/test/SurveyData.json"
       );
       this.surveyData = await response.json();
 
@@ -89,15 +89,39 @@ cc.Class({
     if (this.currentQuestionIndex >= questions.length) {
       console.log("Survey Completed");
       cc.game.removePersistRootNode(this.node);
-      cc.director.loadScene("HomeScreen")
-        console.log("Scene Reloaded");
+      console.log("Scene Reloaded");
+      this.node.active = false;
       return;
     }
 
-    let questionData = questions[this.currentQuestionIndex];
+    let answeredQuestions =
+      JSON.parse(cc.sys.localStorage.getItem("surveyProgress")) || [];
+
+    console.log("Previously Answered Questions:", answeredQuestions);
+
+    // Filter only unanswered questions
+    let remainingQuestions = [];
+    for (let i = 0; i < questions.length; i++) {
+      if (!answeredQuestions.includes(i)) {
+        remainingQuestions.push(questions[i]);
+      }
+    }
+
+    if (remainingQuestions.length === 0) {
+      console.log("Survey Already Completed. Not Showing Again.");
+      this.node.active = false;
+      return;
+    }
+
+    this.currentQuestionIndex = 0;
+    let questionData = remainingQuestions[this.currentQuestionIndex];
 
     let questionLabel = this.node
       .getChildByName("QuestionLabel")
+      ?.getComponent(cc.Label);
+
+    let questionHeading = this.node
+      .getChildByName("QuestionHeading")
       ?.getComponent(cc.Label);
     let optionsContainer = this.node
       .getChildByName("OptionsContainer")
@@ -110,7 +134,8 @@ cc.Class({
       return;
     }
 
-    questionLabel.string = `${questionData.title}\n\n${questionData.question}`;
+    questionLabel.string = `${questionData.title}`;
+    questionHeading.string = `${questionData.question}`;
 
     // Clear existing options
     optionsContainer.removeAllChildren();
@@ -144,7 +169,7 @@ cc.Class({
 
       optionLabel.string = optionText;
 
-      toggleNode.on("toggle", () => {
+      toggleNode.on("toggle", (event) => {
         if (questionData.canSelectMultipleOption) {
           if (selectedOptions.includes(optionText)) {
             selectedOptions = selectedOptions.filter(
@@ -155,6 +180,16 @@ cc.Class({
           }
         } else {
           selectedOptions = [optionText];
+
+          optionsContainer.children.forEach((node) => {
+            let otherToggle = node
+              .getChildByName("OptionToggle")
+              ?.getComponent(cc.Toggle);
+            if (otherToggle) {
+              otherToggle.isChecked = false;
+            }
+          });
+          toggle.isChecked = true;
         }
       });
     });
@@ -162,8 +197,18 @@ cc.Class({
     submitButton.off("click");
     submitButton.on("click", () => {
       console.log(
-        `Selected Options for ${questionData.title}:`,
+        `Selected Options for: ${questionData.question}:`,
         selectedOptions
+      );
+      if (selectedOptions.length === 0) {
+        console.warn("Please select the Option");
+        return;
+      }
+
+      answeredQuestions.push(questions.indexOf(questionData));
+      cc.sys.localStorage.setItem(
+        "surveyProgress",
+        JSON.stringify(answeredQuestions)
       );
 
       this.currentQuestionIndex++;
@@ -185,7 +230,7 @@ cc.Class({
       setTimeout(() => {
         this.showSurvey();
         console.log("Show Survey Manager Called");
-      }, 300);
+      }, 0);
     });
   },
 });
