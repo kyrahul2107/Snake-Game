@@ -6,6 +6,7 @@ cc.Class({
     foodPrefab: cc.Prefab,
     scoreNode: cc.Label,
     timerLabel: cc.Label,
+    surveyPrefab: cc.Prefab,
     delayTime: 5,
   },
 
@@ -34,6 +35,8 @@ cc.Class({
 
     this.scoreHistory =
       JSON.parse(cc.sys.localStorage.getItem("scoreHistory")) || [];
+
+    this.loadSurvey();
   },
 
   onKeyDown(event) {
@@ -74,7 +77,7 @@ cc.Class({
       console.log("It is Time of Increment");
       this.snakeSpeed -= this.snakeSpeed * 0.2;
       this.unschedule(this.moveSnake);
-      this.schedule(this.moveSnake, this.snakeSpeed); 
+      this.schedule(this.moveSnake, this.snakeSpeed);
     }
   },
 
@@ -226,10 +229,27 @@ cc.Class({
     );
   },
 
+  loadSurvey() {
+    if (!this.surveyPrefab) {
+      console.error("Survey prefab not assigned!");
+      return;
+    }
+
+    let surveyInstance = cc.instantiate(this.surveyPrefab);
+    console.log("Survey Prefab Instantiated", surveyInstance);
+
+    this.node.parent.addChild(surveyInstance);
+    this.surveyManager = surveyInstance.getComponent("SurveyManager");
+    this.surveyManager.fetchSurveyData();
+  },
+
   loadEndGameScene() {
     this.saveScore();
     console.log("Game Over!");
-    cc.director.loadScene("HomeScreen");
+   // setTimeout(() => {
+      cc.director.loadScene("HomeScreen");
+  //  }, 20000);
+  this.surveyManager.showSurvey();
   },
 
   onDestroy() {

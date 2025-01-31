@@ -29,8 +29,11 @@ cc.Class({
   },
 
   onLoad() {
-    this.isSoundOn = true;
-    this.audioID = cc.audioEngine.play(this.audioClip, true, 1);
+    cc.audioEngine.stopAll(); 
+    this.isSoundOn = true; 
+    if (this.isSoundOn) {
+      this.audioID = cc.audioEngine.play(this.audioClip, true, 1);
+    }
     this.soundButton.node.on("click", this.onSoundButtonClick, this);
     this.playButton.node.on("click", this.onPlayButtonClick, this);
     this.scoreHistoryButton.node.on(
@@ -57,11 +60,9 @@ cc.Class({
 
   updateSoundButtonSprite() {
     const buttonSprite = this.soundButton.getComponent(cc.Sprite);
-    // console.log(buttonSprite);
     buttonSprite.spriteFrame = this.isSoundOn
       ? this.audioOffSprite
       : this.audioOnSprite;
-    //console.log(buttonSprite);
   },
 
   onPlayButtonClick() {
@@ -75,25 +76,19 @@ cc.Class({
       return;
     }
 
-    // Ensure a maximum of 6 scores
     while (this.scoreHistory.length > 6) {
-      this.scoreHistory.shift(); // Removes the first (oldest) element
+      this.scoreHistory.shift(); 
       console.log(
         "Removed the oldest score, updated score history:",
         this.scoreHistory
       );
     }
 
-    // Clear previous rows
     console.log("Before Removal of Child Nodes", this.scoreHistoryContainer);
     this.scoreHistoryContainer.removeAllChildren();
 
-    // Loop through the updated scoreHistory array and create rows
     this.scoreHistory.forEach((scoreData, index) => {
-      // Instantiate the ScoreRowPrefab
       const scoreRow = cc.instantiate(this.scoreRowPrefab);
-
-      // Set the score, date, and time
       scoreRow
         .getChildByName("ScoreLabel")
         .getComponent(cc.Label).string = `Score: ${scoreData.score}`;
@@ -104,10 +99,8 @@ cc.Class({
         .getChildByName("TimeLabel")
         .getComponent(cc.Label).string = `Time: ${scoreData.time}`;
 
-      // Position the row within the container
-      const rowHeight = 50; // Adjust this value based on the height of your prefab
-      scoreRow.setPosition(0, -index * rowHeight); // Arrange rows vertically
-
+      const rowHeight = 50; 
+      scoreRow.setPosition(0, -index * rowHeight); 
       // Add the row to the container
       this.scoreHistoryContainer.addChild(scoreRow);
     });
