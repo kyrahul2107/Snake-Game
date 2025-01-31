@@ -28,15 +28,16 @@ cc.Class({
     this.schedule(this.updateTimerLabel, 1);
 
     this.scheduleOnce(() => {
-      this.loadEndGameScene();
+    this.saveScore();
+    let surveyInstance = cc.instantiate(this.surveyPrefab);
+    this.surveyManager = surveyInstance.getComponent("SurveyManager");
+    this.surveyManager.loadEndGameScene();
     }, this.delayTime);
 
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
 
     this.scoreHistory =
       JSON.parse(cc.sys.localStorage.getItem("scoreHistory")) || [];
-
-    this.loadSurvey();
   },
 
   onKeyDown(event) {
@@ -170,8 +171,11 @@ cc.Class({
     for (let i = 1; i < this.snakeBody.length; i++) {
       const segment = this.snakeBody[i];
       if (this.arePositionsEqual(head.position, segment.position)) {
-        console.log("Game Over!");
-        this.loadEndGameScene();
+        console.log("Self Collision Occured!");
+        this.saveScore();
+        let surveyInstance = cc.instantiate(this.surveyPrefab);
+        this.surveyManager = surveyInstance.getComponent("SurveyManager");
+        this.surveyManager.loadEndGameScene();
         return true;
       }
     }
@@ -229,28 +233,29 @@ cc.Class({
     );
   },
 
-  loadSurvey() {
-    if (!this.surveyPrefab) {
-      console.error("Survey prefab not assigned!");
-      return;
-    }
+  // loadSurvey() {
+  //   console.log("What are the prefab of this node ", this.surveyPrefab);
+  //   if (!this.surveyPrefab) {
+  //     console.error("Survey prefab not assigned!");
+  //     return;
+  //   }
+  //   let surveyInstance = cc.instantiate(this.surveyPrefab);
+  //   console.log("Survey Prefab Instantiated", surveyInstance);
+  //   this.node.parent.addChild(surveyInstance);
+  //   this.surveyManager = surveyInstance.getComponent("SurveyManager");
+  //   this.surveyManager.fetchSurveyData();
+  // },
 
-    let surveyInstance = cc.instantiate(this.surveyPrefab);
-    console.log("Survey Prefab Instantiated", surveyInstance);
-
-    this.node.parent.addChild(surveyInstance);
-    this.surveyManager = surveyInstance.getComponent("SurveyManager");
-    this.surveyManager.fetchSurveyData();
-  },
-
-  loadEndGameScene() {
-    this.saveScore();
-    console.log("Game Over!");
-   // setTimeout(() => {
-      cc.director.loadScene("HomeScreen");
-  //  }, 20000);
-  this.surveyManager.showSurvey();
-  },
+  // loadEndGameScene() {
+  //   this.saveScore();
+  //   console.log("Game Over!");
+  //   cc.director.loadScene("HomeScreen", () => {
+  //     console.log("Callback Called");
+  //     this.loadSurvey()
+  //     this.surveyManager.showSurvey();
+  //     console.log("Show Survey Manager Called");
+  //   });
+  // },
 
   onDestroy() {
     cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
