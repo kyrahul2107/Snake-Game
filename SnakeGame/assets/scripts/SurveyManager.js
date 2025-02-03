@@ -6,7 +6,7 @@ cc.Class({
     optionsContainer: cc.Node,
     submitButton: cc.Button,
     optionUIPrefab: cc.Prefab,
-  },
+},
 
   onLoad() {
     this.surveyData = null;
@@ -123,11 +123,12 @@ cc.Class({
     let questionHeading = this.node
       .getChildByName("QuestionHeading")
       ?.getComponent(cc.Label);
-    let optionsContainer = this.node
+    let optionsContainer = this.node.getChildByName("LowerContainer")
       .getChildByName("OptionsContainer")
       ?.getChildByName("OptionUI");
 
-    let submitButton = this.node.getChildByName("SubmitButton");
+    let submitButton = this.node.getChildByName("ButtonContainer").getChildByName("SubmitButton");
+  
 
     if (!questionLabel || !optionsContainer || !submitButton) {
       console.error("UI Elements not found!");
@@ -149,7 +150,7 @@ cc.Class({
 
     optionsLayout.type = cc.Layout.Type.VERTICAL;
     optionsLayout.spacingY = 1;
-    optionsLayout.resizeMode = cc.Layout.ResizeMode.NONE;
+    optionsLayout.resizeMode = cc.Layout.ResizeMode.CONTAINER;
 
     // Iterate through options
     questionData.options.forEach((optionText) => {
