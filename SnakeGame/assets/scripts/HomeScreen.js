@@ -6,6 +6,7 @@ cc.Class({
     soundButton: cc.Button,
     playButton: cc.Button,
     scoreHistoryButton: cc.Button,
+    watchTutorial: cc.Button,
     audioClip: {
       default: null,
       type: cc.AudioClip,
@@ -26,9 +27,14 @@ cc.Class({
       default: null,
       type: cc.Node,
     },
+    watchTutorialNode: {
+      default: null,
+      type: cc.VideoPlayer,
+    },
   },
 
   onLoad() {
+    this.watchTutorialNode.node.active=false;
     cc.audioEngine.stopAll(); 
     this.isSoundOn = true; 
     if (this.isSoundOn) {
@@ -41,9 +47,20 @@ cc.Class({
       this.onScoreHistoryButtonClick,
       this
     );
+    this.watchTutorial.node.on("click", this.onwatchTutorialClick, this);
     this.updateSoundButtonSprite();
     this.scoreHistory = [];
     this.scoreHistory = JSON.parse(cc.sys.localStorage.getItem("scoreHistory"));
+  },
+
+  onwatchTutorialClick(){
+    console.log('Watch Tutorial Clicked');
+    if(this.isSoundOn){
+      cc.audioEngine.stop(this.audioID);
+    }
+    this.watchTutorialNode.node.active=true;
+    this.watchTutorialNode.play();
+    
   },
 
   onSoundButtonClick() {
