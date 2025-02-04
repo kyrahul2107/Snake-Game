@@ -7,6 +7,7 @@ cc.Class({
     playButton: cc.Button,
     scoreHistoryButton: cc.Button,
     watchTutorial: cc.Button,
+    
     audioClip: {
       default: null,
       type: cc.AudioClip,
