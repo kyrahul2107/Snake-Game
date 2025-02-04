@@ -33,6 +33,7 @@ cc.Class({
     },
   },
 
+  // Food Overlapping Onload Method
   onLoad() {
     this.watchTutorialNode.node.active=false;
     cc.audioEngine.stopAll(); 
