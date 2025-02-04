@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "95551265-1f8c-4a74-8e1b-81e61fd453d9",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 280,
+  "height": 66,
+  "platformSettings": {},
+  "subMetas": {
+    "WatchTutorial": {
+      "ver": "1.0.6",
+      "uuid": "f0ee1344-f50d-4f3a-872d-8ed1861bb98d",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "95551265-1f8c-4a74-8e1b-81e61fd453d9",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 280,
+      "height": 66,
+      "rawWidth": 280,
+      "rawHeight": 66,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
