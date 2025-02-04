@@ -78,10 +78,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 35
+        "__id__": 36
       },
       {
-        "__id__": 36
+        "__id__": 37
       }
     ],
     "_prefab": null,
@@ -260,10 +260,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 33
+        "__id__": 34
       },
       {
-        "__id__": 34
+        "__id__": 35
       }
     ],
     "_prefab": null,
@@ -1480,6 +1480,9 @@
     "_components": [
       {
         "__id__": 32
+      },
+      {
+        "__id__": 33
       }
     ],
     "_prefab": null,
@@ -1551,6 +1554,20 @@
     "videoPlayerEvent": [],
     "_N$keepAspectRatio": true,
     "_id": "7aO5kxFFtIFq0F2+ImDxcY"
+  },
+  {
+    "__type__": "b2f29KCApNCX4OADDH0EkrV",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 31
+    },
+    "_enabled": true,
+    "watchTutorialNode": {
+      "__id__": 32
+    },
+    "bundleName": "videoBundle",
+    "_id": "a3/sVYDmVJwbs4I4OuB+Mq"
   },
   {
     "__type__": "cc.Sprite",

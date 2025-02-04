@@ -56,11 +56,9 @@ cc.Class({
 
   onwatchTutorialClick(){
     console.log('Watch Tutorial Clicked');
-    if(this.isSoundOn){
-      cc.audioEngine.stop(this.audioID);
-    }
-    this.watchTutorialNode.node.active=true;
-    this.watchTutorialNode.play();
+
+    let videoPlayer = this.watchTutorialNode.getComponent('WatchTutorialNode');
+    videoPlayer.onWatchTutorialRemote();
   },
 
   onSoundButtonClick() {
