@@ -28,6 +28,7 @@ cc.Class({
     },
   },
 
+  // Food Overlapping Onload Method
   onLoad() {
     this.isSoundOn = true;
     this.audioID = cc.audioEngine.play(this.audioClip, true, 1);
