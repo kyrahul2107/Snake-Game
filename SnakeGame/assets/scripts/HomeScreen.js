@@ -35,7 +35,6 @@ cc.Class({
 
   // Food Overlapping Onload Method
   onLoad() {
-    this.watchTutorialNode.node.active=false;
     cc.audioEngine.stopAll(); 
     this.isSoundOn = true; 
     if (this.isSoundOn) {
@@ -61,7 +60,6 @@ cc.Class({
     }
     this.watchTutorialNode.node.active=true;
     this.watchTutorialNode.play();
-    
   },
 
   onSoundButtonClick() {
